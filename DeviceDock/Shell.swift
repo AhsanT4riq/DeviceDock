@@ -30,3 +30,23 @@ nonisolated enum Shell {
         return ShellResult(output: String(decoding: data, as: UTF8.self), exitCode: process.terminationStatus)
     }
 }
+
+nonisolated struct CommandError: LocalizedError {
+    let command: String
+    let exitCode: Int32
+
+    var errorDescription: String? {
+        "\(command) failed (exit \(exitCode))."
+    }
+}
+
+extension Shell {
+    @concurrent
+    static func checked(_ executable: String, _ arguments: [String] = []) async throws -> ShellResult {
+        let result = try await run(executable, arguments)
+        guard result.exitCode == 0 else {
+            throw CommandError(command: URL(fileURLWithPath: executable).lastPathComponent, exitCode: result.exitCode)
+        }
+        return result
+    }
+}

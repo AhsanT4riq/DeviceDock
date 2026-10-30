@@ -28,13 +28,19 @@ nonisolated enum Simctl {
     
     @concurrent
     static func listDevices() async throws -> [Device] {
-        let result = try await Shell.run("/usr/bin/xcrun", ["simctl", "list", "devices", "available", "-j"])
+        let result = try await Shell.checked("/usr/bin/xcrun", ["simctl", "list", "devices", "available", "-j"])
         let list = try JSONDecoder().decode(SimctlList.self, from: Data(result.output.utf8))
         
         var devices: [Device] = []
         for (runtime, simDevices) in list.devices where runtime.contains(".iOS-") {
             for sim in simDevices {
-                devices.append(Device(id: sim.udid, name: sim.name, platform: .iOS, osVersion: osVersion(from: runtime), state: sim.state == "Booted" ? .booted : .shutdown))
+                let state: Device.State
+                switch sim.state {
+                case "Booted": state = .booted
+                case "Booting": state = .booting
+                default: state = .shutdown
+                }
+                devices.append(Device(id: sim.udid, name: sim.name, platform: .iOS, osVersion: osVersion(from: runtime), state: state))
             }
         }
         return devices
@@ -42,12 +48,12 @@ nonisolated enum Simctl {
     
     @concurrent
     static func boot(_ udid: String) async throws {
-        _ = try await Shell.run("/usr/bin/xcrun", ["simctl", "boot", udid])
-        _ = try await Shell.run("/usr/bin/open", ["-b", "com.apple.dt.Devices"])
+        _ = try await Shell.checked("/usr/bin/xcrun", ["simctl", "boot", udid])
+        _ = try await Shell.checked("/usr/bin/open", ["-b", "com.apple.dt.Devices"])
     }
     
     @concurrent
     static func shutdown(_ udid: String) async throws {
-        _ = try await Shell.run("/usr/bin/xcrun", ["simctl", "shutdown", udid])
+        _ = try await Shell.checked("/usr/bin/xcrun", ["simctl", "shutdown", udid])
     }
 }
