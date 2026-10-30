@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- DeviceDock icon glyph: an iPhone and an Android phone standing on a dock. Original artwork, MIT. -->
+  <path fill="#FFFFFF" fill-rule="evenodd" d="M320,270 H416 A70,70 0 0 1 486,340 V660 A70,70 0 0 1 416,730 H320 A70,70 0 0 1 250,660 V340 A70,70 0 0 1 320,270 Z M320,304 H416 A36,36 0 0 1 452,340 V660 A36,36 0 0 1 416,696 H320 A36,36 0 0 1 284,660 V340 A36,36 0 0 1 320,304 Z"/>
+  <path fill="#FFFFFF" d="M333,318 H403 A15,15 0 0 1 418,333 V333 A15,15 0 0 1 403,348 H333 A15,15 0 0 1 318,333 V333 A15,15 0 0 1 333,318 Z"/>
+  <path fill="#FFFFFF" fill-rule="evenodd" d="M584,270 H728 A46,46 0 0 1 774,316 V684 A46,46 0 0 1 728,730 H584 A46,46 0 0 1 538,684 V316 A46,46 0 0 1 584,270 Z M584,304 H728 A12,12 0 0 1 740,316 V684 A12,12 0 0 1 728,696 H584 A12,12 0 0 1 572,684 V316 A12,12 0 0 1 584,304 Z"/>
+  <path fill="#FFFFFF" d="M672,333 a17,17 0 1,0 -34,0 a17,17 0 1,0 34,0 Z"/>
+  <path fill="#FFFFFF" d="M222,768 H802 A22,22 0 0 1 824,790 V790 A22,22 0 0 1 802,812 H222 A22,22 0 0 1 200,790 V790 A22,22 0 0 1 222,768 Z"/>
+</svg>
