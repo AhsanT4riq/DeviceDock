@@ -17,6 +17,17 @@ struct DeviceDockApp: App {
                 }
             }
             Divider()
+            Button("Test Shell") {
+                Task {
+                    do {
+                        let result = try await Shell.run("/usr/bin/xcrun", ["simctl", "list", "devices", "available", "-j"])
+                        print("exit:", result.exitCode)
+                        print(result.output.prefix(300))
+                    } catch {
+                        print("Shell failed:", error)
+                    }
+                }
+            }
             Button("Quit DeviceDock") {
                 NSApplication.shared.terminate(nil)
             }
