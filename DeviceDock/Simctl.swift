@@ -39,4 +39,15 @@ nonisolated enum Simctl {
         }
         return devices
     }
+    
+    @concurrent
+    static func boot(_ udid: String) async throws {
+        _ = try await Shell.run("/usr/bin/xcrun", ["simctl", "boot", udid])
+        _ = try await Shell.run("/usr/bin/open", ["-b", "com.apple.dt.Devices"])
+    }
+    
+    @concurrent
+    static func shutdown(_ udid: String) async throws {
+        _ = try await Shell.run("/usr/bin/xcrun", ["simctl", "shutdown", udid])
+    }
 }

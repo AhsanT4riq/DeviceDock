@@ -26,4 +26,22 @@ final class DeviceStore {
             errorMessage = error.localizedDescription
         }
     }
+    
+    func open(_ device: Device) async {
+        do {
+            try await Simctl.boot(device.id)
+            await refresh()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+    
+    func stop(_ device: Device) async {
+        do {
+            try await Simctl.shutdown(device.id)
+            await refresh()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
 }

@@ -15,8 +15,15 @@ struct DeviceDockApp: App {
             ForEach(store.devicesByRuntime, id: \.runtime) { group in
                 Section(group.runtime) {
                     ForEach(group.devices) { device in
-                        Button(device.name){
-                            print("Open \(device.name)")
+                        if device.state == .booted {
+                            Menu("● \(device.name)"){
+                                Button("Show") {Task {await store.open(device)}}
+                                Button("Stop") {Task {await store.stop(device)}}
+                            }
+                        } else {
+                            Button(device.name){
+                                Task {await store.open(device)}
+                            }
                         }
                     }
                 }
