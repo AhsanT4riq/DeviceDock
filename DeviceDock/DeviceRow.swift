@@ -32,8 +32,8 @@ struct DeviceRow: View {
                     .foregroundStyle(.secondary)
             case .booted:
                 if device.platform == .iOS {
-                    Button("Show") { Task { await store.showDeviceHub() } }
-                        .help("Show DeviceHub")
+                    Button("Show") { Task { await store.show(device) } }
+                        .help("Show this simulator")
                 }
                 Button("Stop") { Task { await store.stop(device) } }
             }

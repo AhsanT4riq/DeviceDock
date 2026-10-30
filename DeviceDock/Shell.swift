@@ -14,16 +14,22 @@ nonisolated struct ShellResult: Sendable {
 
 nonisolated enum Shell {
     @concurrent
-    static func run(_ executable: String, _ arguments: [String] = []) async throws -> ShellResult {
+    static func run(_ executable: String, _ arguments: [String] = [], timeoutSeconds: Double? = nil) async throws -> ShellResult {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: executable)
         process.arguments = arguments
-        
+
         let pipe = Pipe()
         process.standardOutput = pipe
         process.standardError = FileHandle.nullDevice
-        
+
         try process.run()
+        if let timeoutSeconds {
+            // For commands that can wait indefinitely; terminating them ends the read below.
+            DispatchQueue.global().asyncAfter(deadline: .now() + timeoutSeconds) {
+                if process.isRunning { process.terminate() }
+            }
+        }
         let data = try pipe.fileHandleForReading.readToEnd() ?? Data()
         process.waitUntilExit()
         

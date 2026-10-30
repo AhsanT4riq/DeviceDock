@@ -137,11 +137,11 @@ final class DeviceStore {
         await refresh()
     }
 
-    func showDeviceHub() async {
+    func show(_ device: Device) async {
         do {
-            _ = try await Shell.checked("/usr/bin/open", ["-b", "com.apple.dt.Devices"])
+            try await Simctl.show(device.id)
         } catch {
-            actionError = error.localizedDescription
+            actionError = "\(device.name): \(error.localizedDescription)"
         }
     }
 

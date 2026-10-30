@@ -46,10 +46,24 @@ nonisolated enum Simctl {
         return devices
     }
     
+    // Brings the simulator window forward. Xcode 27+ shows simulators in DeviceHub, where a
+    // devices:// link selects the device; earlier Xcode versions use Simulator.app.
+    @concurrent
+    static func show(_ udid: String) async throws {
+        if (try? await Shell.checked("/usr/bin/open", ["devices://device/open?id=\(udid)"])) != nil { return }
+        if (try? await Shell.checked("/usr/bin/open", ["-b", "com.apple.dt.Devices"])) != nil { return }
+        _ = try await Shell.checked("/usr/bin/open", ["-a", "Simulator"])
+    }
+
     @concurrent
     static func boot(_ udid: String) async throws {
         _ = try await Shell.checked("/usr/bin/xcrun", ["simctl", "boot", udid])
-        _ = try await Shell.checked("/usr/bin/open", ["-b", "com.apple.dt.Devices"])
+        // simctl reports "Booted" as soon as the kernel is up; bootstatus waits until iOS has
+        // finished starting (first boots can take 20s+). It never returns if the device is
+        // stopped meanwhile, hence the timeout.
+        _ = try? await Shell.run("/usr/bin/xcrun", ["simctl", "bootstatus", udid], timeoutSeconds: 180)
+        // The device is booting even if no window can be shown, so that doesn't fail the boot.
+        try? await show(udid)
     }
     
     @concurrent
