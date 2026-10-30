@@ -7,12 +7,12 @@
 
 import Foundation
 
-enum Platform: String, Hashable {
+nonisolated enum Platform: String, Hashable {
     case iOS
     case android
 }
 
-struct Device: Identifiable, Hashable {
+nonisolated struct Device: Identifiable, Hashable {
     enum State: Hashable {
         case shutdown
         case booting

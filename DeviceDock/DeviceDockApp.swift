@@ -20,11 +20,12 @@ struct DeviceDockApp: App {
             Button("Test Shell") {
                 Task {
                     do {
-                        let result = try await Shell.run("/usr/bin/xcrun", ["simctl", "list", "devices", "available", "-j"])
-                        print("exit:", result.exitCode)
-                        print(result.output.prefix(300))
+                        let devices = try await Simctl.listDevices()
+                        for device in devices {
+                            print(device.name, "|", device.osVersion, "|", device.state)
+                        }
                     } catch {
-                        print("Shell failed:", error)
+                        print("Listing failed:", error)
                     }
                 }
             }
