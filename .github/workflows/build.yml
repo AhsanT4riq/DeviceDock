@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    # Standard GitHub-hosted runner with Xcode 27 (free for public repos).
+    runs-on: xcode-27
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      # CI only checks that the project compiles. Signing and notarisation stay
+      # on the maintainer's Mac, so no certificates are needed here.
+      - name: Build
+        run: |
+          xcodebuild build \
+            -project DeviceDock.xcodeproj \
+            -scheme DeviceDock \
+            -configuration Release \
+            -destination 'platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO

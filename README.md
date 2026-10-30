@@ -1,5 +1,7 @@
 # DeviceDock
 
+[![Build](https://github.com/AhsanT4riq/DeviceDock/actions/workflows/build.yml/badge.svg)](https://github.com/AhsanT4riq/DeviceDock/actions/workflows/build.yml)
+
 A macOS menu bar app for mobile developers: see all your iOS simulators and Android emulators in one place, start several at once, and stop them with one click.
 
 <img src="docs/screenshot.png" alt="DeviceDock panel" width="320">
@@ -22,8 +24,9 @@ A macOS menu bar app for mobile developers: see all your iOS simulators and Andr
 ## Install
 
 1. Download `DeviceDock.zip` from the [Releases](../../releases) page and unzip it.
-2. Move `DeviceDock.app` to `/Applications`.
-3. The app isn't notarized yet, so the first time, **right-click it → Open**, then confirm.
+2. Move `DeviceDock.app` to `/Applications` and open it. An iPhone icon appears in the menu bar.
+
+DeviceDock is signed with a Developer ID and notarized by Apple, so it opens without Gatekeeper warnings.
 
 ### Build from source
 
@@ -54,7 +57,7 @@ DeviceDock runs the same command-line tools you would:
 | Open | `xcrun simctl boot <udid>` + open DeviceHub | `emulator -avd <name>` |
 | Stop | `xcrun simctl shutdown <udid>` | `adb -s <serial> emu kill` |
 
-That's why the app isn't sandboxed and isn't on the Mac App Store.
+That's why the app isn't sandboxed and isn't on the Mac App Store: sandboxed apps can't launch these tools. It's distributed directly, signed and notarized instead.
 
 ## License
 
