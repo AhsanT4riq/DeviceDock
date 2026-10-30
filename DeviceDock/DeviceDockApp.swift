@@ -11,6 +11,12 @@ import SwiftUI
 struct DeviceDockApp: App {
     var body: some Scene {
         MenuBarExtra("DeviceDock", systemImage: "iphone") {
+            ForEach(Device.samples) {
+                device in Button("\(device.name) - \(device.osVersion)") {
+                    print("Open \(device.name)")
+                }
+            }
+            Divider()
             Button("Quit DeviceDock") {
                 NSApplication.shared.terminate(nil)
             }
