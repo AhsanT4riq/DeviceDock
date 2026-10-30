@@ -9,26 +9,23 @@ import SwiftUI
 
 @main
 struct DeviceDockApp: App {
+    @State private var store = DeviceStore()
     var body: some Scene {
         MenuBarExtra("DeviceDock", systemImage: "iphone") {
-            ForEach(Device.samples) {
-                device in Button("\(device.name) - \(device.osVersion)") {
-                    print("Open \(device.name)")
-                }
-            }
-            Divider()
-            Button("Test Shell") {
-                Task {
-                    do {
-                        let devices = try await Simctl.listDevices()
-                        for device in devices {
-                            print(device.name, "|", device.osVersion, "|", device.state)
+            ForEach(store.devicesByRuntime, id: \.runtime) { group in
+                Section(group.runtime) {
+                    ForEach(group.devices) { device in
+                        Button(device.name){
+                            print("Open \(device.name)")
                         }
-                    } catch {
-                        print("Listing failed:", error)
                     }
                 }
             }
+            Divider()
+            Button("Refresh") {
+                Task { await store.refresh() }
+            }
+            .keyboardShortcut("r")
             Button("Quit DeviceDock") {
                 NSApplication.shared.terminate(nil)
             }
