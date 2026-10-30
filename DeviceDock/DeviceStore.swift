@@ -20,7 +20,9 @@ final class DeviceStore {
     
     func refresh() async {
         do {
-            devices = try await Simctl.listDevices()
+            async let ios = Simctl.listDevices()
+            async let android = Android.listDevices()
+            devices = try await ios + android
             errorMessage = nil
         } catch {
             errorMessage = error.localizedDescription
@@ -29,7 +31,11 @@ final class DeviceStore {
     
     func open(_ device: Device) async {
         do {
-            try await Simctl.boot(device.id)
+            if device.platform == .iOS {
+                try await Simctl.boot(device.id)
+            } else {
+                try Android.start(avd: device.id)
+            }
             await refresh()
         } catch {
             errorMessage = error.localizedDescription
@@ -38,7 +44,11 @@ final class DeviceStore {
     
     func stop(_ device: Device) async {
         do {
-            try await Simctl.shutdown(device.id)
+            if device.platform == .iOS {
+                try await Simctl.shutdown(device.id)
+            } else {
+                try await Android.stop(avd: device.id)
+            }
             await refresh()
         } catch {
             errorMessage = error.localizedDescription
