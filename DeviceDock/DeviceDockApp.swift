@@ -10,8 +10,11 @@ import SwiftUI
 @main
 struct DeviceDockApp: App {
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        MenuBarExtra("DeviceDock", systemImage: "iphone") {
+            Button("Quit DeviceDock") {
+                NSApplication.shared.terminate(nil)
+            }
+            .keyboardShortcut("q")
         }
     }
 }
