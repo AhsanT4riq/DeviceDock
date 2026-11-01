@@ -4,7 +4,7 @@
 
 A macOS menu bar app for mobile developers: see all your iOS simulators and Android emulators in one place, start several at once, and stop them with one click.
 
-<img src="docs/screenshot.png" alt="DeviceDock panel" width="320">
+<img src="design/social-preview.png" alt="DeviceDock: macOS menu bar app listing iOS Simulators and Android Emulators with Open and Stop buttons" width="640">
 
 ## Features
 
